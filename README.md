@@ -1,3 +1,9 @@
+Le jeu du memories 4.0
+Ce jeu ce joue avec 52 cartes et il faut trouver les VALEURS correspondantes et il y à 2 paires pour chaque valeur
+Vous avez 300 secondes
+
+GL&HF
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts

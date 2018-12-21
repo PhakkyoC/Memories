@@ -14,10 +14,10 @@ class GameStats extends Component {
     render() {
         const { timer,score} = this.props;
         return(
-            <div class="container"> 
-                <p class="second">seconde(s) restantes : {timer}</p> 
-            <p class="score">&nbsp;&nbsp;&nbsp; score : {score}</p>
-                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;<button class="reset" onClick={() => window.location.reload()}>restart</button>
+            <div className="container"> 
+                <p className="second">Seconde(s) restantes : {timer}</p> 
+            <p className="score">Score : {score}</p>
+                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;<button className="reset" onClick={() => window.location.reload()}>restart</button>
             </div>
         )
     }

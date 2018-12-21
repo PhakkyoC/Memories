@@ -8,11 +8,10 @@ export const GET_DECK = 'GET_DECK';
 export const FLIP_CARD='FLIP_CARD';
 export const TIMER = "TIMER";
 export const SET_CARD = "SET_CARD";
-export const UNFLIP_CARDS="UNFLIP_CARDS";
+export const DONE="DONE";
 export const BLOCKED = 'BLOCKED';
 export const NONE = "NONE";
 export const UNBLOCKED = 'UNBLOCKED';
-export const SUPPR_CARD = "SUPPR_CARD";
 
 /*
  * action creators
@@ -56,8 +55,8 @@ export function updateCardGame(value,id) {
     return {type: SET_CARD, value:value,id:id}
 }
 
-export function cardFlip(id) {
-    return {type: FLIP_CARD, id}
+export function cardFlip(id,force=false) {
+    return {type: FLIP_CARD, id:id,force:force}
 }
 
 export function updateTimer() {
@@ -77,12 +76,12 @@ function check(state,id,value) {
     {
         return (dispatch) => {
             dispatch(updateCardGame(value,id))
+            dispatch(updateDoneCard(flipped.id));
+            dispatch(updateDoneCard(id));
             dispatch(cardFlip(id));
-            dispatch(supprCard(flipped.id))
-            dispatch(supprCard(id))
         };
     }
-    else if(flipped.id==id && flipped.value==value){
+    else if((flipped.id==id && flipped.value==value) || state.cards[id].done){
         return {type: NONE}
     }
     else if(flipped.id==undefined){
@@ -97,16 +96,13 @@ function check(state,id,value) {
             dispatch(cardFlip(id))
             dispatch(blocked())
             setTimeout(() => {
-                dispatch(unflip())
+                dispatch(cardFlip(id,true))
+                dispatch(cardFlip(flipped.id,true))
                 dispatch(unblocked())
-            }, 800)
+            }, 650)
         };
     }
 
-}
-
-function unflip() {
-    return {type: UNFLIP_CARDS}
 }
 function blocked() {
     return {type: BLOCKED}
@@ -114,6 +110,6 @@ function blocked() {
 function unblocked() {
     return {type: UNBLOCKED}
 }
-function supprCard(id) {
-    return {type: SUPPR_CARD,id:id}
+function updateDoneCard(id) {
+    return {type: DONE,id}
 }

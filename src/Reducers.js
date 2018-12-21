@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux'
 import {
-    GET_DECK,FLIP_CARD,TIMER,SET_CARD,UNFLIP_CARDS,BLOCKED,UNBLOCKED,SUPPR_CARD
+    GET_DECK,FLIP_CARD,TIMER,SET_CARD,BLOCKED,UNBLOCKED,DONE
 } from './Actions'
 
 function game(state = {timer:300,score:0,flipped:{'id':undefined,'value':""}},action) {
@@ -39,6 +39,7 @@ function cards(state = [], action) {
                 e.flipped = false;
                 e.id = i;
                 e.blocked = false;
+                e.done = false
                 state[i] = e;
                 i++;
             })
@@ -46,7 +47,7 @@ function cards(state = [], action) {
         case FLIP_CARD:
             return state.map((card,index ) => {
                 if (action.id === card.id) {
-                    if (!card.flipped && !card.blocked)
+                    if ((!card.flipped && !card.blocked) || (action.force && !card.done))
                     {
                         return Object.assign({}, card, {
                             flipped: !card.flipped
@@ -54,12 +55,6 @@ function cards(state = [], action) {
                     }
                 }
                 return card
-            })
-        case UNFLIP_CARDS:
-            return state.map((card,index ) => {
-                return Object.assign({}, card, {
-                    flipped: false
-                })
             })
         case BLOCKED:
             return state.map((card,index ) => {
@@ -73,8 +68,15 @@ function cards(state = [], action) {
                     blocked: false
                 })
             })
-        case SUPPR_CARD:
-            return state.filter(({ id }) => id !== action.id);
+        case DONE:
+            return state.map((card,index ) => {
+                if (action.id === card.id) {
+                    return Object.assign({}, card, {
+                        done: !card.done
+                    })
+                }
+                return card
+            })
         default:
             return state
     }
